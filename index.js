@@ -10,12 +10,26 @@ addbtn.addEventListener("click", () => {
         return;
     }
     const li = document.createElement("li"); 
-    li.innerHTML = `${inputtext} <button class="rembtn">❌</button>`; 
-    taskList.appendChild(li); 
-    textInput.value = ""; 
-    li.querySelector(".rembtn").addEventListener("click",()=>{
-    li.remove();
+    taskList.style.textAlign='left';
+    const taskText=document.createElement('span');
+    taskText.classList.add('task-text');
+    taskText.textContent=inputtext;
+    const radiobtn=document.createElement('input');
+    radiobtn.type='radio';
+    radiobtn.classList.add('complete-radio');
+    radiobtn.addEventListener('change',()=>{
+        if(radiobtn.checked){
+            taskText.classList.add('completed');
+        }else{
+            taskText.classList.remove('completed');
+        }
     });
+    li.appendChild(radiobtn);
+    li.appendChild(taskText);
+    taskList.appendChild(li);
+    textInput.value="";
+    textInput.setAttribute('placeholder','enter your text');
+
 });
 
 rembtn.addEventListener("click", () => {
@@ -29,7 +43,9 @@ rembtn.addEventListener("click", () => {
 showtasklist.addEventListener("click", () => {
     const tasks = [];
     document.querySelectorAll("#tasklist li").forEach(li => {
-        tasks.push(li.textContent.replace("❌", "").trim());
+        const taskText=li.querySelector('.task-text');
+        const isCompleted=taskText.classList.contains('completed');
+        tasks.push(isCOmpleted ? '[completed]':'[pending]'+taskText.textContent);
     });
 
     if (tasks.length === 0) {
@@ -38,5 +54,6 @@ showtasklist.addEventListener("click", () => {
         alert("Tasks:\n" + tasks.join("\n"));
     }
 });
+
 
 
